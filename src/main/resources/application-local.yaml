@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres:5432/postgres?currentSchema=tema2
+    username: postgres
+    password: postgres
+  liquibase:
+    enabled: true
+    change-log: classpath:/db.migration/changelog.xml
+    liquibase-schema: tema2
+    default-schema: tema2
+server:
+  port: 6000
