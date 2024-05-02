@@ -52,6 +52,9 @@ public class TariController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> editTara(@PathVariable Integer id, @RequestBody Tari tara) {
+        if (tara.getId() == null) {
+            return new ResponseEntity<>("The body is not complete. Missing ID.", HttpStatus.BAD_REQUEST);
+        }
         if (!id.equals(tara.getId())) {
             return new ResponseEntity<>("Mismatch between path ID and body ID", HttpStatus.BAD_REQUEST);
         }

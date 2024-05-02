@@ -102,7 +102,10 @@ public class OraseController {
             Tari tara = tariService.getTariById(idTara);
 
             Integer jsonId = requestData.containsKey("id") ? Integer.parseInt(requestData.get("id").toString()) : null;
-            if (jsonId != null && !id.equals(jsonId)) {
+            if (jsonId == null) {
+                return new ResponseEntity<>("The body is not complete. Missing ID.", HttpStatus.BAD_REQUEST);
+            }
+            if (!id.equals(jsonId)) {
                 return new ResponseEntity<>("ID mismatch between URL and body", HttpStatus.BAD_REQUEST);
             }
 

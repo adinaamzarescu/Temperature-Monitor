@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -67,8 +68,14 @@ public class TemperaturiController {
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTemperature(@PathVariable Integer id, @RequestBody Map<String, Object> requestData) {
         try {
-            if (!requestData.containsKey("idOras") || !requestData.containsKey("valoare") || !requestData.containsKey("id")) {
-                return new ResponseEntity<>("Missing required parameters", HttpStatus.BAD_REQUEST);
+            Set<String> expectedKeys = Set.of("idOras", "valoare", "id");
+
+            if (!requestData.keySet().containsAll(expectedKeys)) {
+                return new ResponseEntity<>("Missing required parameters.", HttpStatus.BAD_REQUEST);
+            }
+
+            if (!expectedKeys.containsAll(requestData.keySet())) {
+                return new ResponseEntity<>("Unexpected extra parameters found.", HttpStatus.BAD_REQUEST);
             }
 
             Integer bodyId = Integer.parseInt(requestData.get("id").toString());
