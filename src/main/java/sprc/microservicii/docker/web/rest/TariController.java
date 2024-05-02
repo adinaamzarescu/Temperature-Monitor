@@ -61,6 +61,8 @@ public class TariController {
         try {
             Tari updatedTara = service.updateTari(id, tara);
             return new ResponseEntity<>(updatedTara, HttpStatus.OK);
+        } catch (NumberFormatException | NullPointerException e) {
+            return new ResponseEntity<>("Invalid data provided", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             if (e.getMessage().contains("Country not found")) {
                 return new ResponseEntity<>("Country not found with ID: " + id, HttpStatus.NOT_FOUND);

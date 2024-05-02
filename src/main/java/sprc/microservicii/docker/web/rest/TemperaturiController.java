@@ -73,7 +73,6 @@ public class TemperaturiController {
             if (!requestData.keySet().containsAll(expectedKeys)) {
                 return new ResponseEntity<>("Missing required parameters.", HttpStatus.BAD_REQUEST);
             }
-
             if (!expectedKeys.containsAll(requestData.keySet())) {
                 return new ResponseEntity<>("Unexpected extra parameters found.", HttpStatus.BAD_REQUEST);
             }
