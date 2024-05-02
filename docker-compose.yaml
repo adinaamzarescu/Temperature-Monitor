@@ -1,13 +1,16 @@
 version: '3.8'
+
 services:
   springboot-app:
-    build: .
+    build: .  # Local build for Docker Compose
     ports:
       - "6000:6000"
     environment:
-      - SPRING_PROFILES_ACTIVE=local
+      SPRING_PROFILES_ACTIVE: local  # Environment variables are used here to configure the Spring Boot application.
     depends_on:
-      - postgres
+      - postgres  # Uses named DNS to depend on the 'postgres' service by name.
+    networks:
+      - backend  # Part of the backend network, logically separating it from other services like pgAdmin.
 
   postgres:
     image: postgres:latest
@@ -16,9 +19,33 @@ services:
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: postgres  # Environment variables are used to configure PostgreSQL.
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data  # Uses volumes for data persistence.
+    networks:
+      - backend  # Part of the backend network, sharing with the Spring Boot app for efficient database access.
+      - common_network  # Also part of a common network with pgAdmin for management purposes.
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: root  # Environment variables are used to configure pgAdmin.
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres  # Uses named DNS to depend on the 'postgres' service by name.
+    networks:
+      - admin_network  # Isolated in the admin_network, separate from the application's main operations.
+      - common_network  # Shares a common network with PostgreSQL to facilitate database management.
 
 volumes:
-  postgres_data:
+  postgres_data: {}  # Defines the volume for PostgreSQL data persistence.
+
+networks:
+  backend:
+    driver: bridge
+  admin_network:
+    driver: bridge
+  common_network:
+    driver: bridge

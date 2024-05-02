@@ -1,4 +1,5 @@
 package sprc.microservicii.docker.domain;
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class Tari implements Serializable {
     public Tari() {
 
     }
+
     public Tari(Integer id, String nume, Double lat, Double lon) {
         this.id = id;
         this.nume = nume;

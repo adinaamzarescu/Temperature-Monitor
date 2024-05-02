@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Temperaturi", schema = "tema2")
@@ -19,21 +18,22 @@ public class Temperaturi implements Serializable {
     private Double valoare;
 
     @Column(name = "timestamp", nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate timestamp;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+    private LocalDateTime timestamp = LocalDateTime.now();
 
     @ManyToOne
     @JoinColumn(name = "id_oras", referencedColumnName = "id")
-    private Orase id_oras;
+    private Orase idOras;
 
     public Temperaturi() {
 
     }
-    public Temperaturi(Integer id, Double valoare, LocalDate timestamp, Orase oras) {
+
+    public Temperaturi(Integer id, Double valoare, LocalDateTime timestamp, Orase oras) {
         this.id = id;
         this.valoare = valoare;
         this.timestamp = timestamp;
-        this.id_oras = oras;
+        this.idOras = oras;
     }
 
     public Integer getId() {
@@ -52,21 +52,19 @@ public class Temperaturi implements Serializable {
         this.valoare = valoare;
     }
 
-    public LocalDate getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDate timestamp) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = timestamp.format(formatter);
-        this.timestamp = LocalDate.parse(formattedDate, formatter);
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
-    public Orase getId_oras() {
-        return id_oras;
+    public Orase getIdOras() {
+        return idOras;
     }
 
-    public void setId_oras(Orase oras) {
-        this.id_oras = oras;
+    public void setIdOras(Orase oras) {
+        this.idOras = oras;
     }
 }

@@ -1,6 +1,5 @@
 package sprc.microservicii.docker.service.implementation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sprc.microservicii.docker.domain.Orase;
 import sprc.microservicii.docker.repository.OraseRepository;
@@ -14,7 +13,6 @@ public class OraseServiceImpl implements OraseService {
 
     private final OraseRepository oraseRepository;
 
-    @Autowired
     public OraseServiceImpl(OraseRepository oraseRepository) {
         this.oraseRepository = oraseRepository;
     }
@@ -25,34 +23,48 @@ public class OraseServiceImpl implements OraseService {
     }
 
     @Override
-    public Orase getOraseById(Integer id) {
+    public Orase getOraseById(Integer id) throws Exception {
         Optional<Orase> optionalOrase = oraseRepository.findById(id);
-        return optionalOrase.orElse(null);
+        if (optionalOrase.isEmpty()) {
+            throw new Exception("No city found with ID: " + id);
+        }
+        return optionalOrase.get();
     }
 
     @Override
-    public Orase createOrase(Orase oras) {
+    public Orase createOrase(Orase oras) throws Exception {
+        if (oraseRepository.findByNume(oras.getNume()).isPresent()) {
+            throw new Exception("Duplicate entry for city name");
+        }
         return oraseRepository.save(oras);
     }
 
     @Override
-    public Orase updateOrase(Integer id, Orase oras) {
-        if (oraseRepository.existsById(id)) {
-            oras.setId(id);
-            return oraseRepository.save(oras);
+    public Orase updateOrase(Integer id, Orase updatedOras) throws Exception {
+        Optional<Orase> existingOras = oraseRepository.findById(id);
+        if (existingOras.isEmpty()) {
+            throw new Exception("No city found with ID: " + id);
         }
-        return null;
+
+        Optional<Orase> conflictingCity = oraseRepository.findByNumeAndIdNot(updatedOras.getNume(), id);
+        if (conflictingCity.isPresent()) {
+            throw new Exception("Duplicate entry for city name");
+        }
+
+        existingOras.get().setNume(updatedOras.getNume());
+        existingOras.get().setLat(updatedOras.getLat());
+        existingOras.get().setLon(updatedOras.getLon());
+        existingOras.get().setIdTara(updatedOras.getIdTara());
+        return oraseRepository.save(existingOras.get());
     }
 
     @Override
     public void deleteOrase(Integer id) {
-        if (oraseRepository.existsById(id)) {
-            oraseRepository.deleteById(id);
-        }
+        oraseRepository.deleteById(id);
     }
 
     @Override
-    public List<Orase> getOraseByCountry(Integer id_Tara) {
-        return oraseRepository.findByIdTara_Id(id_Tara);
+    public List<Orase> getOraseByCountry(Integer idTara) {
+        return oraseRepository.findByIdTara_Id(idTara);
     }
 }

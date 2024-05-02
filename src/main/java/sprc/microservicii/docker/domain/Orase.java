@@ -1,7 +1,9 @@
 package sprc.microservicii.docker.domain;
+
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+
 @Entity
 @Table(name = "Orase", schema = "tema2")
 public class Orase implements Serializable {
@@ -26,6 +28,7 @@ public class Orase implements Serializable {
     public Orase() {
 
     }
+
     public Orase(Integer id, Tari tara, String nume, Double lat, Double lon) {
         this.id = id;
         this.idTara = tara;

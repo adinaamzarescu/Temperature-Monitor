@@ -25,29 +25,35 @@ public class TariServiceImpl implements TariService {
     }
 
     @Override
-    public Tari getTariById(Integer id) {
+    public Tari getTariById(Integer id) throws Exception {
         Optional<Tari> optionalTari = tariRepository.findById(id);
-        return optionalTari.orElse(null);
+        return optionalTari.orElseThrow(() -> new Exception("Country not found with ID: " + id));
     }
 
     @Override
-    public Tari createTari(Tari tari) {
+    public Tari createTari(Tari tari) throws Exception {
+        if (tariRepository.findByNume(tari.getNume()).isPresent()) {
+            throw new Exception("Duplicate entry for country name");
+        }
         return tariRepository.save(tari);
     }
 
     @Override
-    public Tari updateTari(Integer id, Tari tari) {
-        if (tariRepository.existsById(id)) {
-            tari.setId(id);
-            return tariRepository.save(tari);
+    public Tari updateTari(Integer id, Tari updatedTari) throws Exception {
+        Tari existingTari = getTariById(id);
+        if (tariRepository.findByNumeAndIdNot(updatedTari.getNume(), id).isPresent()) {
+            throw new Exception("Duplicate entry for country name");
         }
-        return null;
+
+        existingTari.setNume(updatedTari.getNume());
+        existingTari.setLat(updatedTari.getLat());
+        existingTari.setLon(updatedTari.getLon());
+        return tariRepository.save(existingTari);
     }
 
     @Override
-    public void deleteTari(Integer id) {
-        if (tariRepository.existsById(id)) {
-            tariRepository.deleteById(id);
-        }
+    public void deleteTari(Integer id) throws Exception {
+        Tari tari = getTariById(id);
+        tariRepository.delete(tari);
     }
 }

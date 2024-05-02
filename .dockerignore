@@ -1,0 +1,26 @@
+# IDE directories
+.idea/
+.vscode/
+
+# Build output directories
+build/
+out/
+target/
+dist/
+
+# Dependency directories
+node_modules/
+
+# Version control directories
+.git/
+.gitignore
+.svn/
+.cvsignore
+
+# Logs
+*.log
+logs/
+
+# Miscellaneous files
+*.md
+*.sh

@@ -3,8 +3,8 @@
 
 CREATE TABLE IF NOT EXISTS tema2.Temperaturi (
     id SERIAL PRIMARY KEY,
-    valoare DECIMAL(5, 2),
-    timestamp DATE,
-    id_oras INT REFERENCES tema2.orase(id),
+    valoare DECIMAL(5, 2) NOT NULL ,
+    timestamp TIMESTAMP NOT NULL ,
+    id_oras INT REFERENCES tema2.orase(id) NOT NULL ,
     CONSTRAINT temperaturi_unic UNIQUE (id_oras, timestamp)
 );

@@ -8,11 +8,11 @@ public interface TariService {
 
     List<Tari> getAllTari();
 
-    Tari getTariById(Integer id);
+    Tari getTariById(Integer id) throws Exception;
 
-    Tari createTari(Tari tari);
+    public Tari createTari(Tari tari) throws Exception;
 
-    Tari updateTari(Integer id, Tari tari);
+    Tari updateTari(Integer id, Tari tari) throws Exception;
 
-    void deleteTari(Integer id);
+    void deleteTari(Integer id) throws Exception;
 }

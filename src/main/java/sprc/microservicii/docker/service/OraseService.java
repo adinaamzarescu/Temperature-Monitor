@@ -8,11 +8,11 @@ public interface OraseService {
 
     List<Orase> getAllOrase();
 
-    Orase getOraseById(Integer id);
+    Orase getOraseById(Integer id) throws Exception;
 
-    Orase createOrase(Orase oras);
+    Orase createOrase(Orase oras) throws Exception;
 
-    Orase updateOrase(Integer id, Orase oras);
+    Orase updateOrase(Integer id, Orase oras) throws Exception;
 
     void deleteOrase(Integer id);
 

@@ -9,9 +9,9 @@ public interface TemperaturiService {
 
     List<Temperaturi> getAllTemperaturi();
 
-    Temperaturi getTemperaturiById(Integer id);
+    Temperaturi getTemperaturiById(Integer id) throws Exception;
 
-    Temperaturi createTemperaturi(Temperaturi temperatura);
+    Temperaturi createTemperaturi(Temperaturi temperatura) throws Exception;
 
     List<Temperaturi> getTemperaturiByFilter(Double lat, Double lon, LocalDate from, LocalDate until);
 
@@ -19,7 +19,7 @@ public interface TemperaturiService {
 
     List<Temperaturi> getTemperaturiByCountryAndFilter(Integer idTara, LocalDate from, LocalDate until);
 
-    Temperaturi updateTemperaturi(Integer id, Temperaturi temperatura);
+    Temperaturi updateTemperaturi(Integer id, Temperaturi temperatura) throws Exception;
 
-    void deleteTemperaturi(Integer id);
+    void deleteTemperaturi(Integer id) throws Exception;
 }
