@@ -106,6 +106,49 @@ environment:
     - **DELETE** `/api/temperatures/{id}`: Confirms the existence of the temperature record before proceeding with
       deletion, providing clear feedback on error scenarios (200, 400, 404).
 
+### **Note**
+
+- The errors are handled in a specific order. If a request has more than 1 problem, the first error will be returned.
+
+For example:
+
+```java
+@PutMapping("/{id}")
+public ResponseEntity<?> updateTemperature(@PathVariable Integer id, 
+                                           @RequestBody Map<String, 
+                                           Object> requestData) {
+    if (!requestData.keySet().containsAll(expectedKeys)) {
+        return new ResponseEntity<>("Missing required parameters.", 
+                                    HttpStatus.BAD_REQUEST);
+    }
+    if (!expectedKeys.containsAll(requestData.keySet())) {
+        return new ResponseEntity<>("Unexpected extra parameters found.", 
+                                    HttpStatus.BAD_REQUEST);
+    }
+    if (!id.equals(bodyId)) {
+        return new ResponseEntity<>("ID mismatch between URL and body", 
+                                    HttpStatus.BAD_REQUEST);
+    }
+    // Other code...
+}
+```
+
+With the request:
+
+```http request
+PUT http://localhost:6000/api/temperatures/145
+
+Body:
+{
+    "nume": 69
+}
+
+Response:
+"Missing required parameters."
+```
+
+So even if the Body also has invalid data, the first check (requred paramters) will be the first one to return an error.
+
 ## Database Constraints and Timestamp Handling
 
 ### Country Table Creation
