@@ -1,4 +1,4 @@
-# Microservicii-Docker
+# Temperature-Monitor
 
 This README provides a comprehensive guide on how the Docker-related requirements and REST API error handling are
 implemented within the project.
